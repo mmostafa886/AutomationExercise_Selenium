@@ -1,0 +1,22 @@
+[
+  {
+    "FirstName": "FirstName001",
+    "LastName": "LastName001",
+    "Address": "Street Street,27",
+    "Country": "Canada",
+    "State": "Ontario",
+    "City": "Small City001",
+    "Zipcode": "123456",
+    "Mobile": "01111111111"
+  },
+  {
+    "FirstName": "FirstName002",
+    "LastName": "LastName002",
+    "Address": "Street Street,28",
+    "Country": "India",
+    "State": "Delhi",
+    "City": "Small City002",
+    "Zipcode": "654321",
+    "Mobile": "0123456789"
+  }
+]
