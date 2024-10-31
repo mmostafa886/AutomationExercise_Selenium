@@ -8,8 +8,5 @@ public class ApiBase {
     public static String ApiBaseURL = propertiesLoader.getProperty("baseUrl")+"/api";
     public static final int SUCCESS = 200;
 
-    public ApiBase() {
-        ApiBaseURL = propertiesLoader.getProperty("baseUrl")+"/api";
-    }
 
 }
