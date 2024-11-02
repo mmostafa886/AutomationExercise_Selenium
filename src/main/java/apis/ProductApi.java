@@ -2,26 +2,25 @@ package apis;
 
 import static io.restassured.RestAssured.*;
 
-import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import io.qameta.allure.Step;
+import io.qameta.allure.testng.AllureTestNg;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.codehaus.groovy.reflection.ParameterTypes;
 import org.testng.Assert;
-import org.testng.asserts.Assertion;
-import utilities.PropertiesLoader;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONObject;
+import org.testng.annotations.Listeners;
 
+@Listeners({AllureTestNg.class})
 public class ProductApi {
 
     private static final String productsList = "/productsList";
     private final String searchProducts = "/searchProduct";
 
-    @Step("Getting a list of all products in the shop")
+    @Step("Getting API Response of requesting all products")
     public Response getProductsList() {
         baseURI = ApiBase.ApiBaseURL;
         Response response = get(productsList);
@@ -31,11 +30,20 @@ public class ProductApi {
     }
 
 
-    @Step("Get ist of products")
+@Step("Get List of products")
     public List<Object> getListOfProducts() {
         Response response = getProductsList();
-        System.out.println("Response: " + response.getBody().asString());
+//        System.out.println("Response: " + response.getBody().asString());
         return response.getBody().jsonPath().get("products");
+    }
+
+    @Step("Get Random Product Name")
+    public String getRandomProductName() {
+        List<Object> productsList = getListOfProducts();
+        Random random = new Random();
+        int productsListSize = productsList.size();
+        int randomIndex = random.nextInt(productsListSize+1);
+        return getProductNameAtSpecificIndex(randomIndex);
     }
 
     @Step("Get the name of he product at [{index}] location")
@@ -65,13 +73,17 @@ public class ProductApi {
     @Step("Search for last product from the Products List")
     public ProductApi searchForLastProductFromTheProductsList() {
         List<Object> productsList = getListOfProducts();
-        System.out.println("Product List: " + productsList.toString());
         int productsListSize = productsList.size();
-        System.out.println("Product List Size: " + productsListSize);
         String lastProductName = getProductNameAtSpecificIndex(productsListSize);
-        System.out.println("Product Name: " + lastProductName);
         searchForAPproduct(lastProductName);
         asserProductNameAtSpecificIndex(0, lastProductName);
+        return this;
+    }
+
+    @Step("Search for last product from the Products List")
+    public ProductApi searchForRandomProductFromTheProductsList() {
+        searchForAPproduct(getRandomProductName());
+        asserProductNameAtSpecificIndex(0, getRandomProductName());
         return this;
     }
 }
