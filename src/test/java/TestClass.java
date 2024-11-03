@@ -6,7 +6,8 @@ import org.testng.annotations.Test;
 
 @Slf4j
 @Listeners({AllureTestNg.class})
-public class TestClass {
+public class TestClass extends TestSetUp{
+
     @Test(description = "Verify steps in report")
     public void verifyAllureSteps() {
         exampleStep();
@@ -20,5 +21,10 @@ public class TestClass {
     public void exampleStep() {
         System.out.println("Example step executed");
 
+    }
+
+    @Test
+    public void firstTestMehod() {
+        homePage.assertHomePageOpened();
     }
 }

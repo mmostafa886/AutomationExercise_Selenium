@@ -54,3 +54,23 @@ The user can open the generated report directly after the execution by combining
 ## Check for the POM.xml dependencies 
 - In order to automatically check for maven dependencies available updates, the file `.github/dependabot.yml` was created to allow the dependabot to check for dependency updates so that we can keep all the pom.xml dependencies updated.
 - More info about the dependabot can be found under `https://github.com/dependabot`
+
+## Design Patterns
+- The script incorporates several design patterns effectively:
+    ```
+    **Page Object Model (POM):**
+    Having a separate page implementation, which aligns with the principles of the Page Object Model. This design pattern helps in organizing and maintaining a clear separation between the test scripts and the underlying page implementation.
+    
+    **Singleton Pattern & Factory Pattern in DriverFactory Class:**
+    The DriverFactory class modified to follow the Singleton pattern, ensuring that only one instance of the WebDriver is created and shared across the entire application & reset the "Driver Instance" after each test class. This is a good use of the Singleton pattern.
+    Additionally, the createDriver method in the DriverFactory class serves as a Factory Method, encapsulating the creation logic for different types of WebDriver instances. This aligns with the Factory Method pattern.
+    
+    **ThreadLocal Pattern in BaseTest Class:**
+    The use of ThreadLocal<WebDriver> in the BaseTest class is a good application of the ThreadLocal pattern. It ensures that each thread (test method) gets its own independent instance of the WebDriver, preventing interference between parallel test executions.
+  
+    In summary, the script seems to follow a good design pattern structure, incorporating:
+  - POM for page organization.
+  - Singleton and Factory patterns for WebDriver management in DriverFactory.
+  - ThreadLocal for thread safety in the BaseTest class.
+  These design patterns contribute to maintainability, scalability, and clarity in your test automation framework.
+    ```

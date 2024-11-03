@@ -1,6 +1,6 @@
 package apis;
 
-import utilities.PropertiesLoader;
+import utils.PropertiesLoader;
 
 public class ApiBase {
 
