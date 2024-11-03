@@ -8,9 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utils.DriverFactory;
 import utils.PropertiesLoader;
 
@@ -40,10 +38,16 @@ public class MultiThreadedTest {
      FluentWait<WebDriver> fluentWait;
     WebDriverWait wait;
 
-    public void initializeDriver() {
+    public void initializeDriver(String providedBrowser) {
+        String browser;
+        if (!(providedBrowser == null)) {
+            browser = providedBrowser;
+        } else {
+            browser = testBrowser;
+        }
         driverThreadLocal = ThreadLocal.withInitial(() -> {
             try {
-                return DriverFactory.createDriver(environment, gridUrl, testBrowser);
+                return DriverFactory.createDriver(environment, gridUrl, browser);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -66,7 +70,8 @@ public class MultiThreadedTest {
 
     @BeforeMethod
     public void startDriver() {
-        initializeDriver();
+        String browser = System.getProperty("browser");
+        initializeDriver(browser);
     }
 
     @AfterMethod

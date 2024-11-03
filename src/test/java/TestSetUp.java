@@ -45,7 +45,6 @@ public class TestSetUp {
         Properties props = configReader.loadConfig("config.properties");
         environment = props.getProperty("environment");
         gridUrl = props.getProperty("grid_url");
-        testBrowser = props.getProperty("test_browser");
 
         if (getDriver() == null) {
             driver = DriverFactory.createDriver(environment, gridUrl, TestBrowser);

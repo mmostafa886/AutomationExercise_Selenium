@@ -5,6 +5,8 @@
 1. Execute All Tests: mvn clean test
 2. Run Specific Test class: mvn clean test -Dtest=ApiTest
 3. Run Specific Test inside a class: mvn clean test -Dtest=MixedTest#registerNewUserAPIAndLoginTest.
+4. For Web tests, it will be executed using the `browser` configured in properties file `src/main/resources/properties/config.properties`
+5. In case the user wants to execute on different browser, the command `mvn clean test -Dtest=MultiThreadedTest -Dbrowser=safari` can be used to execute the target script on Safari for example.
 ### Headless Execution
 ### Parallel Execution
 1. Hint:
