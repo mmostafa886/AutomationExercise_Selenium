@@ -5,8 +5,30 @@
 1. Execute All Tests: mvn clean test
 2. Run Specific Test class: mvn clean test -Dtest=ApiTest
 3. Run Specific Test inside a class: mvn clean test -Dtest=MixedTest#registerNewUserAPIAndLoginTest.
-4. For Web tests, it will be executed using the `browser` configured in properties file `src/main/resources/properties/config.properties`
-5. In case the user wants to execute on different browser, the command `mvn clean test -Dtest=MultiThreadedTest -Dbrowser=safari` can be used to execute the target script on Safari for example.
+4. For Web tests, it will be executed using the `Browser` configured in properties file `src/main/resources/properties/config.properties`.
+5. In case the user wants to execute on different browser, the command `mvn clean test -Dtest=MultiThreadedTest -DBrowser=safari` can be used to execute the target script on Safari for example.
+6. It is also allowed to pass the browser as a parameter in the testng.xml inside the test Ex. `<parameter name="Browser" value="Chrome"/>` which requires tuning to the pom.xml in the surefire plugin section as in the below.
+```dtd
+ <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <!--Use this section whenever we need specific configuration for the test execution-->
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+```
+7. Combining the three options, here is how we can deal with the browser
+   1. In case the browser is provided through the maven command `(mvn clean test -Dtest=MultiThreadedTest -DBrowser=safari)`, the test will be executed on the provided browser.
+   2. If the browser is not provided through the maven command, we check for the browser provided in the `testng.xml`.
+   3. If neither of the 2 previous points was provided, then we execute the test based on the `Browser` configured in properties file `src/main/resources/properties/config.properties`.
 ### Headless Execution
 ### Parallel Execution
 1. Hint:
