@@ -10,8 +10,16 @@ public class AllureParameterListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
         String browser = TestSetUp.getExecutionBrowser();
-        Allure.parameter("Browser: ", browser);
+        String executionEnvironment;
+        if (TestSetUp.headless != null && TestSetUp.headless.equalsIgnoreCase("False")) {
+            executionEnvironment = "Headed";
+        } else {
+            executionEnvironment = "Headless";
+        }
+        Allure.parameter("Execution Browser: ", browser);
         Allure.label("tag" , browser);
+        Allure.parameter("Execution Mode: ", executionEnvironment);
+        Allure.label("tag" , executionEnvironment);
         //Allure.description("Browser: " + browser);
     }
 

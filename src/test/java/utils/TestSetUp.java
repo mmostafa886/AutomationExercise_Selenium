@@ -33,6 +33,7 @@ public class TestSetUp {
     private static String environment = propertiesLoader.getProperty("environment");
     private static String gridUrl = propertiesLoader.getProperty("grid_url");
     public static String testBrowser = propertiesLoader.getProperty("Browser");
+    public static String headless = propertiesLoader.getProperty("headless");
 
     //ThreadLocal Initialization: Ensures driver, wait, and fluentWait are thread-safe by using ThreadLocal.
     //ThreadLocal should be initialized at class level to avoid repeated initialization.
@@ -51,9 +52,11 @@ public class TestSetUp {
     public static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
+
     public static WebDriverWait getWait() {
         return waitThreadLocal.get();
     }
+
     public static FluentWait<WebDriver> getFluentWait() {
         return fluentWaitThreadLocal.get();
     }
@@ -69,9 +72,17 @@ public class TestSetUp {
      * fluentWaitThreadLocal.set: Assigns the initialized fluentWait to the current thread.
      */
     public static void setUp(String browser) {
+        boolean headlessBoolean;
+        // Handle null, miswritten, or not provided headless parameter
+        if (headless == null || (!headless.equalsIgnoreCase("true") && !headless.equalsIgnoreCase("false"))) {
+            headlessBoolean = true;
+            // default value for headless
+        } else {
+            headlessBoolean = Boolean.parseBoolean(headless);
+        }
         driverThreadLocal.set(ThreadLocal.withInitial(() -> {
             try {
-                return DriverFactory.createDriver(environment, gridUrl, browser);
+                return DriverFactory.createDriver(environment, gridUrl, browser, headlessBoolean);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }

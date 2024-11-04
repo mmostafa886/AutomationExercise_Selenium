@@ -95,6 +95,7 @@ public class MultiThreadedTest {
 //        Validations.assertThat().object(studentsNumber).isNotNull();
 //    }
 //
+    //Intentionally failing
     @Test(description = "Search Google For SHAFT_Engine#2")
     public void searchGoogleForShaftEngine2() {
         log.info("Navigate to google");
@@ -103,6 +104,7 @@ public class MultiThreadedTest {
         //Allure.step("Navigate to google", Status.PASSED);
 
         Allure.addAttachment("Log", "text/plain", "Browser title is Google");
+        //This where the test is failing, change the expected value to "Google"
         Assert.assertEquals(getDriver().getTitle(), "Google012", "Browser Title doesn't equal \"Google\"");
         //Allure.step("Browser title is Google", Status.PASSED);
         log.info("Browser Title: " + getDriver().getTitle());

@@ -30,6 +30,9 @@
    2. If the browser is not provided through the maven command, we check for the browser provided in the `testng.xml`.
    3. If neither of the 2 previous points was provided, then we execute the test based on the `Browser` configured in properties file `src/main/resources/properties/config.properties`.
 ### Headless Execution
+1. The script support both `Headless & Headed` execution modes through the `headless` property in the `config.properties` file which takes `true or false` boolean values.
+2. The script was tuned to allow default value of `true (i.e: Headless)` in case of not providing a value or providing some trash value like `uwvfuyvuw` in the `config.properties` file.
+3. By modifying the `AllureParameterListener>>onTestStart`, the `"Execution Mode" (Headless/Headed)` label is logged as a parameter to the Allure Report .
 ### Parallel Execution
 #### Hints on ThreadLocal
 1. Remember to use private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); to properly manage your driver in your test classes as following the usual driver initialization methods will result in problems in managing drivers' sessions & immature tests ending.
@@ -41,6 +44,10 @@
   2. `parallel`: This what we use to enable parallel execution & on what level, it can take the values `tests, classes, methods, instances(=both methods & classes)`.
   3. `thread-count`: the number of Threads/Instances that can be opened for the parallel execution.
 - There is no a step-by-step guide for enabling the Parallel execution, but it depends on how the tests are organized so the configuration we used in the `Testng.xml` is cohesively related to the example setup we use for `src/test/java/MultiThreadedTest.java`.
+### Sample Execution Comparison
+- Executing the `MultiThreadedTest` for `Chrome, FirFox & Edge` is the sample test used in Testng.xml `(<class name="MultiThreadedTest"/>)`.
+- Serial execution (not parallel) took around ~ 16 seconds.
+- Parallel Execution took around ~ 10 seconds only with the config of `(<suite name="All Test Suite" parallel="methods" thread-count="2">)`.
 
 ## Allure Report
 1. Create the `generate_allure_report.sh` file at the project root with the contents below
