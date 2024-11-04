@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="All Test Suite" thread-count="1"> <!--Use this line in parallel execution is needed  parallel="tests" thread-count="3"-->
+<suite name="All Test Suite" parallel="methods" thread-count="2"> <!--Use this line in parallel execution is needed  parallel="tests" thread-count="3"-->
     <listeners>
         <listener class-name="utils.AllureParameterListener"/>
     </listeners>
-    <!--<suite name="All Test Suite">--> <!--Use this line in case sequential execution is needed-->
-
-    <!--This section below (<suite-files>) will execute the tests defined in each of them,
-    they will be executed "Sequentially" neglecting the (parallel="tests" thread-count="3") attributes defined in the <suite> level -->
-    <!--    <suite-files>
-            <suite-file path="TestNG-Suites/chrome-tests.xml"/>
-            <suite-file path="TestNG-Suites/firefox-tests.xml"/>
-            <suite-file path="TestNG-Suites/edge-tests.xml"/>
-        </suite-files>-->
-
-    <!--This section below includes a set of tests & each test has defined a "TestBrowser" parameter
-    depending on the (parallel="tests" thread-count="3") attributes defined in the <suite> level, those tests will be executed "Sequentially" or in "Parallel"
-    Of course it will be better (test duration wise) to be executed in parallel-->
     <test name="Chrome Test">
         <parameter name="Browser" value="Chrome"/>
         <classes>
@@ -36,10 +23,11 @@
             <class name="MultiThreadedTest"/>
         </classes>
     </test>
-    <test name="Safari Test">
-        <parameter name="Browser" value="Safari"/>
-        <classes>
-            <class name="MultiThreadedTest"/>
-        </classes>
-    </test>
+    <!--Don't use Safari except when needed-->
+<!--    <test name="Safari Test">-->
+<!--        <parameter name="Browser" value="Safari"/>-->
+<!--        <classes>-->
+<!--            <class name="MultiThreadedTest"/>-->
+<!--        </classes>-->
+<!--    </test>-->
 </suite>

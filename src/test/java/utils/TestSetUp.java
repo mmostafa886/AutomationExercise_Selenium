@@ -25,43 +25,59 @@ import java.time.format.DateTimeFormatter;
 
 @Slf4j
 public class TestSetUp {
+
     private TestSetUp() {
     }
-
 
     private static final PropertiesLoader propertiesLoader = new PropertiesLoader();
     private static String environment = propertiesLoader.getProperty("environment");
     private static String gridUrl = propertiesLoader.getProperty("grid_url");
     public static String testBrowser = propertiesLoader.getProperty("Browser");
+
+    //ThreadLocal Initialization: Ensures driver, wait, and fluentWait are thread-safe by using ThreadLocal.
+    //ThreadLocal should be initialized at class level to avoid repeated initialization.
+    private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<WebDriverWait> waitThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<FluentWait<WebDriver>> fluentWaitThreadLocal = new ThreadLocal<>();
+
     @Getter
     @Setter
     private static String ExecutionBrowser;
 
-    @Getter
-    private static ThreadLocal<WebDriver> driverThreadLocal;
-
-    static FluentWait<WebDriver> fluentWait;
-    public static WebDriverWait wait;
-
-    @Getter //Used Lombok getter instead of defining or writing my own getter
-    private static WebDriver driver;
-
     protected HomePage homePage;
     protected MenuBar menuBar;
 
+    // Getter Methods: Fetches the instances of(driver, wait & fluentWait) from their ThreadLocals ensuring thread safety.
+    public static WebDriver getDriver() {
+        return driverThreadLocal.get();
+    }
+    public static WebDriverWait getWait() {
+        return waitThreadLocal.get();
+    }
+    public static FluentWait<WebDriver> getFluentWait() {
+        return fluentWaitThreadLocal.get();
+    }
+
+    /**
+     * ThreadLocal.withInitial(): Defines the initialization logic for the ThreadLocal variable.
+     * Lambda Expression () -> {...}: Inside withInitial, the lambda initializes the WebDriver instance.
+     * DriverFactory.createDriver(): Creates the WebDriver instance, considering the environment, grid URL, and browser type.
+     * ThreadLocal.set(): Assigns the initialized WebDriver to the current thread.
+     * ThreadLocal.get(): Retrieves the WebDriver instance for the current thread.
+     * This combo ensures each test thread works with its independent WebDriver instance, maintaining isolation and preventing conflicts.
+     * waitThreadLocal.set: Assigns the initialized wait to the current thread.
+     * fluentWaitThreadLocal.set: Assigns the initialized fluentWait to the current thread.
+     */
     public static void setUp(String browser) {
-        driverThreadLocal = ThreadLocal.withInitial(() -> {
+        driverThreadLocal.set(ThreadLocal.withInitial(() -> {
             try {
                 return DriverFactory.createDriver(environment, gridUrl, browser);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-        });
-        driver = driverThreadLocal.get();
-        wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
-        fluentWait = new FluentWait<>(getDriver()).withTimeout(Duration.ofSeconds(30))
-                .pollingEvery(Duration.ofMillis(300))
-                .ignoring(Exception.class);
+        }).get());
+        waitThreadLocal.set(new WebDriverWait(getDriver(), Duration.ofSeconds(30)));
+        fluentWaitThreadLocal.set(new FluentWait<>(getDriver()).withTimeout(Duration.ofSeconds(30)).pollingEvery(Duration.ofMillis(300)).ignoring(Exception.class));
     }
 
     public void startWebAppInstance() {
@@ -70,15 +86,17 @@ public class TestSetUp {
         menuBar = new MenuBar(getDriver());
     }
 
+    // Teardown Method: Properly cleans up each thread’s instances.
     @Step("Driver Teardown")
     public static void teardown() {
         if (getDriver() != null) {
-            driverThreadLocal.remove();
             getDriver().quit();
+            driverThreadLocal.remove();
+            waitThreadLocal.remove();
+            fluentWaitThreadLocal.remove();
             System.out.println("Driver Closed");
         }
     }
-
 
     public static void screenshotOnFailure(ITestResult result) {
         if (ITestResult.FAILURE == result.getStatus()) {

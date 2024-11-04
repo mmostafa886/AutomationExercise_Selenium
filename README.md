@@ -31,8 +31,16 @@
    3. If neither of the 2 previous points was provided, then we execute the test based on the `Browser` configured in properties file `src/main/resources/properties/config.properties`.
 ### Headless Execution
 ### Parallel Execution
-1. Hint:
-   Remember to use private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); to properly manage your driver in your test classes as following the usual driver initialization methods will result in problems in managing drivers' sessions & immature tests ending.
+#### Hints on ThreadLocal
+1. Remember to use private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); to properly manage your driver in your test classes as following the usual driver initialization methods will result in problems in managing drivers' sessions & immature tests ending.
+2. The ThreadLocal must be defined at the Class level to avoid repeated initialization.
+3. We used ThreadLocal for the `WebDriver` which forces using ThreadLocal for corresponding entities `WebDriverWait & FluentWait`.
+### Testng.xml needed modifications
+- The `Testng.xml` needs to be modified on the `<suite>` level as follows: `<suite name="All Test Suite" parallel="methods" thread-count="2">`
+  1. `name`: The suite name which will be used to organize the execution & displayed in report (Ex. This will be the suite name in the generated allure report).
+  2. `parallel`: This what we use to enable parallel execution & on what level, it can take the values `tests, classes, methods, instances(=both methods & classes)`.
+  3. `thread-count`: the number of Threads/Instances that can be opened for the parallel execution.
+- There is no a step-by-step guide for enabling the Parallel execution, but it depends on how the tests are organized so the configuration we used in the `Testng.xml` is cohesively related to the example setup we use for `src/test/java/MultiThreadedTest.java`.
 
 ## Allure Report
 1. Create the `generate_allure_report.sh` file at the project root with the contents below

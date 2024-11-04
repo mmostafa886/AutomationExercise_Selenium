@@ -9,6 +9,7 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.TestSetUp;
@@ -26,17 +27,21 @@ public class MultiThreadedTest {
     By rankStudents = By.className("tau100-item");
 
     public WebDriver getDriver() {
-        return TestSetUp.getDriverThreadLocal().get();
+        return TestSetUp.getDriver();
     }
 
-    @BeforeMethod
-    public void startDriver(ITestContext context) {
+    @BeforeClass
+    public void getBrowser(ITestContext context) {
         // Fetch parameter from TestNG context or System property
-         String paramBrowser = context.getCurrentXmlTest().getParameter("Browser");
+        String paramBrowser = context.getCurrentXmlTest().getParameter("Browser");
         String cmdBrowser = System.getProperty("Browser");
         TestSetUp.setExecutionBrowser((cmdBrowser != null) ? cmdBrowser : (paramBrowser != null ? paramBrowser : TestSetUp.testBrowser));
         log.info("Driver started");
         browser = TestSetUp.getExecutionBrowser();
+    }
+
+    @BeforeMethod
+    public void startDriver() {
         TestSetUp.setUp(browser);
         Allure.step("Browser: " + browser);
     }
@@ -70,7 +75,7 @@ public class MultiThreadedTest {
         //Allure.addAttachment("Log", "text/plain", "Search For SHAFT_Engine");
         getDriver().findElement(searchField).sendKeys("SHAFT_Engine");
         getDriver().findElement(searchField).sendKeys(Keys.ENTER);
-        TestSetUp.wait.until(ExpectedConditions.invisibilityOfElementLocated(gmailHyperLink));
+        TestSetUp.getWait().until(ExpectedConditions.invisibilityOfElementLocated(gmailHyperLink));
         Allure.step("Search For SHAFT_Engine");
 
         //Allure.addAttachment("Log", "text/plain", "Browser title contains SHAFT_Engine");
@@ -113,7 +118,7 @@ public class MultiThreadedTest {
         Allure.addAttachment("Log", "text/plain", "Search For SHAFT_Engine");
         getDriver().findElement(searchField).sendKeys("SHAFT_Engine");
         getDriver().findElement(searchField).sendKeys(Keys.ENTER);
-        TestSetUp.wait.until(ExpectedConditions.invisibilityOfElementLocated(gmailHyperLink));
+        TestSetUp.getWait().until(ExpectedConditions.invisibilityOfElementLocated(gmailHyperLink));
         //Allure.step("Search For SHAFT_Engine", Status.PASSED);
 
         Allure.addAttachment("Log", "text/plain", "Browser title contains SHAFT_Engine");
