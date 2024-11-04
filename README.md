@@ -37,6 +37,9 @@ exit
 ###   Open the "Allure Report" directly after execution
 The user can open the generated report directly after the execution by combining both the commands `mvn clean test  ; ./generate_allure_report.sh
 `.
+### Attach image in case of failure to the report
+1. First we need to take the screenshot through the method `TestSetup.captureScreenShot()` in the `@AfterMethod` so that we can check the result then take the screenshot in case of failure.
+2. We can also attach it the allure report `TestSetup.attachScreenshotToAllure()`
 ### General Points.
 1. The user can log any of the methods used during testing as a step in the generated Allure report by using the tag "@Step" on the method level Ex. `@Step("Getting API Response of requesting all products")`.
 

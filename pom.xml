@@ -24,6 +24,7 @@
         <allure.attachments.version>2.29.0</allure.attachments.version>
         <allure.command.line.version>2.30.0</allure.command.line.version>
         <allure.generator.version>2.30.0</allure.generator.version>
+        <allure.java.commons.version>2.29.0</allure.java.commons.version>
         <lombok.version>1.18.34</lombok.version>
         <json.version>20240303</json.version>
     </properties>
@@ -72,6 +73,11 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure.testng.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+            <version>${allure.java.commons.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -103,9 +109,9 @@
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
                     <!--Use this section whenever we need specific configuration for the test execution-->
-                    <!--                    <suiteXmlFiles>-->
-                    <!--                        <suiteXmlFile>testng.xml</suiteXmlFile>-->
-                    <!--                    </suiteXmlFiles>-->
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
             <plugin>
