@@ -26,17 +26,12 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class TestSetUp {
 
-    private TestSetUp() {
-    }
-
     private static final PropertiesLoader propertiesLoader = new PropertiesLoader();
     private static String environment = propertiesLoader.getProperty("environment");
     private static String gridUrl = propertiesLoader.getProperty("grid_url");
     public static String testBrowser = propertiesLoader.getProperty("Browser");
     public static String headless = propertiesLoader.getProperty("headless");
 
-    //ThreadLocal Initialization: Ensures driver, wait, and fluentWait are thread-safe by using ThreadLocal.
-    //ThreadLocal should be initialized at class level to avoid repeated initialization.
     private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
     private static ThreadLocal<WebDriverWait> waitThreadLocal = new ThreadLocal<>();
     private static ThreadLocal<FluentWait<WebDriver>> fluentWaitThreadLocal = new ThreadLocal<>();
@@ -45,10 +40,12 @@ public class TestSetUp {
     @Setter
     private static String ExecutionBrowser;
 
-    protected HomePage homePage;
-    protected MenuBar menuBar;
+    protected static HomePage homePage;
+    protected static MenuBar menuBar;
 
-    // Getter Methods: Fetches the instances of(driver, wait & fluentWait) from their ThreadLocals ensuring thread safety.
+    private TestSetUp() {
+    }
+
     public static WebDriver getDriver() {
         return driverThreadLocal.get();
     }
@@ -61,43 +58,32 @@ public class TestSetUp {
         return fluentWaitThreadLocal.get();
     }
 
-    /**
-     * ThreadLocal.withInitial(): Defines the initialization logic for the ThreadLocal variable.
-     * Lambda Expression () -> {...}: Inside withInitial, the lambda initializes the WebDriver instance.
-     * DriverFactory.createDriver(): Creates the WebDriver instance, considering the environment, grid URL, and browser type.
-     * ThreadLocal.set(): Assigns the initialized WebDriver to the current thread.
-     * ThreadLocal.get(): Retrieves the WebDriver instance for the current thread.
-     * This combo ensures each test thread works with its independent WebDriver instance, maintaining isolation and preventing conflicts.
-     * waitThreadLocal.set: Assigns the initialized wait to the current thread.
-     * fluentWaitThreadLocal.set: Assigns the initialized fluentWait to the current thread.
-     */
     public static void setUp(String browser) {
-        boolean headlessBoolean;
-        // Handle null, miswritten, or not provided headless parameter
-        if (headless == null || (!headless.equalsIgnoreCase("true") && !headless.equalsIgnoreCase("false"))) {
-            headlessBoolean = true;
-            // default value for headless
-        } else {
-            headlessBoolean = Boolean.parseBoolean(headless);
-        }
-        driverThreadLocal.set(ThreadLocal.withInitial(() -> {
+        boolean headlessBoolean = headless != null && headless.equalsIgnoreCase("false") ? false : true;
+        if (driverThreadLocal.get() == null) {
+            WebDriver driver = null;
             try {
-                return DriverFactory.createDriver(environment, gridUrl, browser, headlessBoolean);
+                log.info("Creating WebDriver instance...");
+                driver = DriverFactory.createDriver(environment, gridUrl, browser, headlessBoolean);
+                log.info("WebDriver instance created successfully.");
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-        }).get());
-        waitThreadLocal.set(new WebDriverWait(getDriver(), Duration.ofSeconds(30)));
-        fluentWaitThreadLocal.set(new FluentWait<>(getDriver()).withTimeout(Duration.ofSeconds(30)).pollingEvery(Duration.ofMillis(300)).ignoring(Exception.class));
+            driverThreadLocal.set(driver);
+            waitThreadLocal.set(new WebDriverWait(driver, Duration.ofSeconds(30)));
+            fluentWaitThreadLocal.set(new FluentWait<>(driver)
+                    .withTimeout(Duration.ofSeconds(30))
+                    .pollingEvery(Duration.ofMillis(300)).ignoring(Exception.class));
+        }
     }
 
-    public void startWebAppInstance() {
+    @Step("Start the WebApp")
+    public static void startWebAppInstance() {
         homePage = new HomePage(getDriver());
         homePage.openAutomationExerciseWebSite();
         menuBar = new MenuBar(getDriver());
     }
 
-    // Teardown Method: Properly cleans up each thread’s instances.
     @Step("Driver Teardown")
     public static void teardown() {
         if (getDriver() != null) {
@@ -121,62 +107,39 @@ public class TestSetUp {
         return new WindowManager(getDriver());
     }
 
-    /**
-     * @return formattedDateTime in order to use it whenever needed to have unique name
-     * we will use it later to name the screenshots
-     */
     public static String getCurrentDatTime() {
-        // Get the current date and time
         LocalDateTime currentDateTime = LocalDateTime.now();
-
-        // Define a custom date-time format if needed
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-        // Format the current date and time using the specified formatter
-        String formattedDateTime = currentDateTime.format(formatter);
-
-        return formattedDateTime;
+        return currentDateTime.format(formatter);
     }
 
-    /**
-     * This method is used to Capture the Screenshot & then attach it to the Allure report.
-     */
     @Step("Capture Screenshot")
     public static void captureScreenShot(String methodName) {
         try {
-            // Take a screenshot using WebDriver
             TakesScreenshot screenshot = (TakesScreenshot) getDriver();
             byte[] screenshotBytes = screenshot.getScreenshotAs(OutputType.BYTES);
             File screenshotFile = screenshot.getScreenshotAs(OutputType.FILE);
 
-            // Define the directory within your project
             File screenshotDir = new File("screenshots");
             if (!screenshotDir.exists()) {
-                screenshotDir.mkdirs(); // Create the directory if it doesn't exist
+                screenshotDir.mkdirs();
             }
-            // Save the screenshot to the project directory
+
             File destinationFile = new File(screenshotDir, "test_" + getCurrentDatTime() + ".png");
             Files.move(screenshotFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            // Attach the screenshot to Allure report
             attachScreenshotToAllure(screenshotBytes);
-            //Used whenever we want to log the screenshot taking into the Allure report
-            //Allure.step("Screenshot saved at:  " + screenshotDir + "test_" + getCurrentDatTime() + ".png");
-            log.info("Screenshot saved at:  " + screenshotDir + "/test_" + getCurrentDatTime() + ".png");
+            log.info("Screenshot saved at: " + destinationFile.getAbsolutePath());
         } catch (Exception e) {
             log.info("Screenshot Not Created");
             e.printStackTrace();
         }
     }
 
-    /**
-     * This is a standard allure method to attach images to the report
-     */
     @Step("Attach Screenshot to Report")
     @Attachment(value = "Failure Screenshot", type = "image/png")
     private static byte[] attachScreenshotToAllure(byte[] screenshot) {
         log.info("Attach Screenshot to Report");
         return screenshot;
     }
-
 }

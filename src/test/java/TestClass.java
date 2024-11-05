@@ -24,7 +24,7 @@ public class TestClass{
     }
 
 //    @Test
-//    public void firstTestMehod() {
+//    public void assertHomePageOpenedSuccessfully() {
 //        homePage.assertHomePageOpened();
 //    }
 }

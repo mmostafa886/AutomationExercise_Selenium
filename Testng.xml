@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="All Test Suite" parallel="methods" thread-count="2"> <!--Use this line in parallel execution is needed  parallel="methods" thread-count="2"-->
+<suite name="All Test Suite" parallel="methods"
+       thread-count="2"> <!--Use this line in parallel execution is needed  parallel="methods" thread-count="2"-->
     <listeners>
         <listener class-name="utils.AllureParameterListener"/>
     </listeners>
@@ -9,25 +10,29 @@
         <parameter name="Browser" value="Chrome"/>
         <classes>
             <class name="MultiThreadedTest"/>
+            <class name="WebTest"/>
         </classes>
     </test>
     <test name="Firefox Test">
         <parameter name="Browser" value="FireFox"/>
         <classes>
             <class name="MultiThreadedTest"/>
+            <class name="WebTest"/>
         </classes>
     </test>
     <test name="Edge Test">
         <parameter name="Browser" value="Edge"/>
         <classes>
             <class name="MultiThreadedTest"/>
+            <class name="WebTest"/>
         </classes>
     </test>
     <!--Don't use Safari except when needed-->
-<!--    <test name="Safari Test">-->
-<!--        <parameter name="Browser" value="Safari"/>-->
-<!--        <classes>-->
-<!--            <class name="MultiThreadedTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <!--    <test name="Safari Test">-->
+    <!--        <parameter name="Browser" value="Safari"/>-->
+    <!--        <classes>-->
+    <!--            <class name="MultiThreadedTest"/>-->
+    <!--<class name="WebTest"/>-->
+    <!--        </classes>-->
+    <!--    </test>-->
 </suite>
