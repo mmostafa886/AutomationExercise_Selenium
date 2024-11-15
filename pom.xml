@@ -25,7 +25,7 @@
         <allure.command.line.version>2.30.0</allure.command.line.version>
         <allure.generator.version>2.30.0</allure.generator.version>
         <allure.java.commons.version>2.29.0</allure.java.commons.version>
-        <lombok.version>1.18.34</lombok.version>
+        <lombok.version>1.18.36</lombok.version>
         <json.version>20240303</json.version>
     </properties>
 
