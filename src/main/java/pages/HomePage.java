@@ -25,6 +25,7 @@ public class HomePage {
         Allure.step("Open the Web App HomePage");
         this.driver = driver;
         log.info("Open the Web App HomePage");
+        menuBar = new MenuBar(driver);
     }
 
     @Step("Navigate to the App homepage")
@@ -39,7 +40,13 @@ public class HomePage {
 
     @Step("Verify that the Home page is already opened")
     public HomePage assertHomePageOpened() {
-        Assert.assertTrue(driver.findElement(appLogo).isDisplayed());
+        Assert.assertTrue(driver.findElement(appLogo).isDisplayed(), "The App logo is not displayed");
+        return this;
+    }
+
+    @Step("Login process completed successfully")
+    public HomePage assertLoginSuccess() {
+        Assert.assertTrue(driver.findElement(menuBar.logout).isDisplayed(), "The Logout button is not displayed");
         return this;
     }
 }

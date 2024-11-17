@@ -40,6 +40,7 @@ public class TestSetUp {
     private static String executionBrowser;
 
     protected static HomePage homePage;
+    @Getter
     protected static MenuBar menuBar;
 
     private TestSetUp() {
