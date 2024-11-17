@@ -116,3 +116,8 @@ The user can open the generated report directly after the execution by combining
   - ThreadLocal for thread safety in the BaseTest class.
   These design patterns contribute to maintainability, scalability, and clarity in your test automation framework.
     ```
+  
+## General Comments
+### PropertiesLoader
+- A Java class `(src/main/java/utils/PropertiesLoader.java)` was added in order to enable reading whatever the properties found under the directory `(src/main/resources/properties)`.
+- A main method was added inside that class in order to enable verifying the readability of any specific property (Testing purposes).

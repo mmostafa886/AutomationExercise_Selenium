@@ -32,11 +32,7 @@ public class MultiThreadedTest {
 
     @BeforeClass
     public void getBrowser(ITestContext context) {
-        // Fetch parameter from TestNG context or System property
-        String paramBrowser = context.getCurrentXmlTest().getParameter("Browser");
-        String cmdBrowser = System.getProperty("Browser");
-        TestSetUp.setExecutionBrowser((cmdBrowser != null) ? cmdBrowser : (paramBrowser != null ? paramBrowser : TestSetUp.testBrowser));
-        log.info("Driver started");
+        TestSetUp.setExecutionBrowser(context);
         browser = TestSetUp.getExecutionBrowser();
     }
 

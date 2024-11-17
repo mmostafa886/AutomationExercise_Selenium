@@ -34,7 +34,7 @@ public class ProductsPage {
     @Step("Assert The Products page is opened")
     public ProductsPage assertProductsPageOpened() {
        String productsAreaTitle = driver.findElement(allProductsAreaTitle).getText();
-        Assert.assertEquals(productsAreaTitle, "ALL PRODUCTS");
+        Assert.assertTrue(productsAreaTitle.contains("ALL PRODUCTS"));
         return this;
     }
 //

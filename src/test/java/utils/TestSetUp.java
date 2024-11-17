@@ -4,13 +4,13 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
 import pages.HomePage;
 import pages.MenuBar;
@@ -37,8 +37,7 @@ public class TestSetUp {
     private static ThreadLocal<FluentWait<WebDriver>> fluentWaitThreadLocal = new ThreadLocal<>();
 
     @Getter
-    @Setter
-    private static String ExecutionBrowser;
+    private static String executionBrowser;
 
     protected static HomePage homePage;
     protected static MenuBar menuBar;
@@ -58,6 +57,26 @@ public class TestSetUp {
         return fluentWaitThreadLocal.get();
     }
 
+    @Step("Setting up execution browser")
+    public static void setExecutionBrowser(ITestContext context){
+        String paramBrowser = context.getCurrentXmlTest().getParameter("Browser");
+        String cmdBrowser = System.getProperty("Browser");
+        if (cmdBrowser != null) {
+            Allure.step("The browser passed as a parameter through the execution command");
+            executionBrowser = cmdBrowser;
+            log.info("Browser ({}) provided through the execution command", executionBrowser);
+        } else if (paramBrowser != null) {
+            Allure.step("The browser passed as a parameter through the TestNG.xml execution file");
+            executionBrowser = paramBrowser;
+            log.info("Browser ({}) provided through the TestNG.xml execution file", executionBrowser);
+        } else {
+            Allure.step("The browser passed as a parameter through the config.properties file");
+            executionBrowser = testBrowser;
+            log.info("Browser ({}) provided through the config.properties file", executionBrowser);
+        }
+    }
+
+    @Step("Starting Driver Instance")
     public static void setUp(String browser) {
         boolean headlessBoolean = headless != null && headless.equalsIgnoreCase("false") ? false : true;
         if (driverThreadLocal.get() == null) {
