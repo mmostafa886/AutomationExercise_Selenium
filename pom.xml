@@ -20,7 +20,7 @@
         <surefire.version>3.5.2</surefire.version>
         <rest.assured.version>5.5.0</rest.assured.version>
         <allure.testng.version>2.29.0</allure.testng.version>
-        <allure.mvn.version>2.14.0</allure.mvn.version>
+        <allure.mvn.version>2.15.2</allure.mvn.version>
         <allure.attachments.version>2.29.0</allure.attachments.version>
         <allure.command.line.version>2.30.0</allure.command.line.version>
         <allure.generator.version>2.30.0</allure.generator.version>
