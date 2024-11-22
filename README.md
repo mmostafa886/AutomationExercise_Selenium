@@ -121,3 +121,6 @@ The user can open the generated report directly after the execution by combining
 ### PropertiesLoader
 - A Java class `(src/main/java/utils/PropertiesLoader.java)` was added in order to enable reading whatever the properties found under the directory `(src/main/resources/properties)`.
 - A main method was added inside that class in order to enable verifying the readability of any specific property (Testing purposes).
+### JsonDataReader
+- A Java class `(src/main/java/utils/JsonDataReader.java)` was added in order to handle the JSON data files.
+- It can be used to pass the Source file to the responsible method then process data from this data file `(Ex. WebTest.registerNewUserAndLoginTest)`.
