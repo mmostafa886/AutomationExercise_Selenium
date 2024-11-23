@@ -99,6 +99,7 @@ public class TestSetUp {
 
     @Step("Start the WebApp")
     public static void startWebAppInstance() {
+        getDriver().manage().window().maximize();
         homePage = new HomePage(getDriver());
         homePage.openAutomationExerciseWebSite();
         menuBar = new MenuBar(getDriver());

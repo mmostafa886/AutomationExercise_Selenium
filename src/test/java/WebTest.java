@@ -8,7 +8,6 @@ import pages.AccountCreatedPage;
 import pages.HomePage;
 import pages.MenuBar;
 import pages.SignUpAndLoginPage;
-import utils.JsonDataReader;
 import utils.TestSetUp;
 
 import static utils.TestSetUp.getDriver;
@@ -49,17 +48,15 @@ public class WebTest {
 
     @Test
     public void registerNewUserAndLoginTest() {
-        JsonDataReader testData = new JsonDataReader("src/test/resources/testDataFiles/AccountData.json");
         SignUpAndLoginPage signUpAndLogin = TestSetUp.getMenuBar().goToSignUpAndLoginPage();
-        AccountCreatedPage accountCreatedPage = signUpAndLogin.createAccount(randomName, randomName + "@email.com", randomName
-                , testData.getTestData("FirstName"), testData.getTestData("LastName")
-                , testData.getTestData("Address"), testData.getTestData("Country")
-                , testData.getTestData("State"), testData.getTestData("City")
-                , testData.getTestData("Zipcode"), testData.getTestData("Mobile"));
+        AccountCreatedPage accountCreatedPage = signUpAndLogin
+                .createAccuntWithDataFromJson("src/test/resources/testDataFiles/AccountData.json");
         accountCreatedPage.assertSuccessMessageVisibility();
         HomePage homePage = accountCreatedPage.pressConitueButton().assertLoginSuccess();
        MenuBar menuBar = homePage.getMenuBar().logOut().getMenuBar().isLogOutNotDisplayed();
-        menuBar.goToSignUpAndLoginPage(). userLogin(randomName + "@email.com", randomName).assertLoginSuccess();
+        menuBar.goToSignUpAndLoginPage()
+                .userLogin(signUpAndLogin.getRandomName()+ "@email.com", signUpAndLogin.getRandomName())
+                .assertLoginSuccess();
         homePage.getMenuBar().deleteAccount().isLogOutNotDisplayed();
     }
 
