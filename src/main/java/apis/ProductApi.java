@@ -23,7 +23,6 @@ public class ProductApi {
 
     public ProductApi() {
         baseURI = ApiBase.ApiBaseURL;
-        //RestAssured.filters(new RequestLoggingFilter()., new ResponseLoggingFilter());
     }
 
     @Step("Getting API Response of requesting all products")
@@ -31,7 +30,6 @@ public class ProductApi {
         log.info("Getting API Response of requesting all products");
         Response response = get(productsList);
         response.then().statusCode(ApiBase.SUCCESS);
-//        given().get(productsList).then().statusCode(ApiBase.SUCCESS);
         return response;
     }
 
@@ -39,7 +37,6 @@ public class ProductApi {
     @Step("Get List of products")
     public List<Object> getListOfProducts(Response response) {
         log.info("Get List of products");
-//        System.out.println("Response: " + response.getBody().asString());
         return response.getBody().jsonPath().get("products");
     }
 
@@ -96,7 +93,6 @@ public class ProductApi {
         Response response = searchForAPproduct(randomProductName);
         List<Object> ProductsList = getListOfProducts(response);
         System.out.println(ProductsList);
-        // String productName = getProductNameAtSpecificIndex(0, response);
         asserProductNameAtSpecificIndex(0, randomProductName, response);
         return this;
     }

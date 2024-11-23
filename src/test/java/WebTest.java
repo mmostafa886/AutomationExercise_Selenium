@@ -1,7 +1,5 @@
 import io.qameta.allure.Allure;
-import io.qameta.allure.Description;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -16,7 +14,6 @@ import static utils.TestSetUp.getDriver;
 @Slf4j
 public class WebTest {
     String browser;
-    String randomName = RandomStringUtils.randomAlphanumeric(10).toLowerCase();
 
     @BeforeClass
     public void getBrowser(ITestContext context) {

@@ -1,5 +1,9 @@
 # Automation Exercise (using Selenium)
 ### This is the same project as (https://github.com/mmostafa886/AutomationExercise) but this one is using the native Selenium
+## Project Contents
+- A set of Web Tests under `src/test/java/WebTest.java` which contain only Web actions.
+- A set of API Tests under `src/test/java/ApiTest.java` which contain only API actions/calls.
+- A set of Mixed Tests under `src/test/java/MixedTest.java` which contain a mix of Web & API actions & calls.
 ## Test Execution
 ### Normal Execution
 1. Execute All Tests: mvn clean test
@@ -38,12 +42,14 @@
 1. Remember to use private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); to properly manage your driver in your test classes as following the usual driver initialization methods will result in problems in managing drivers' sessions & immature tests ending.
 2. The ThreadLocal must be defined at the Class level to avoid repeated initialization.
 3. We used ThreadLocal for the `WebDriver` which forces using ThreadLocal for corresponding entities `WebDriverWait & FluentWait`.
-### Testng.xml needed modifications
+#### Testng.xml needed modifications
 - The `Testng.xml` needs to be modified on the `<suite>` level as follows: `<suite name="All Test Suite" parallel="methods" thread-count="2">`
   1. `name`: The suite name which will be used to organize the execution & displayed in report (Ex. This will be the suite name in the generated allure report).
   2. `parallel`: This what we use to enable parallel execution & on what level, it can take the values `tests, classes, methods, instances(=both methods & classes)`.
   3. `thread-count`: the number of Threads/Instances that can be opened for the parallel execution.
 - There is no a step-by-step guide for enabling the Parallel execution, but it depends on how the tests are organized so the configuration we used in the `Testng.xml` is cohesively related to the example setup we use for `src/test/java/MultiThreadedTest.java`.
+### Execution based on Tags
+[NEXT]
 ### Sample Execution Comparison
 - Executing the `MultiThreadedTest` for `Chrome, FirFox & Edge` is the sample test used in Testng.xml `(<class name="MultiThreadedTest"/>)`.
 - Serial execution (not parallel) took around ~ 16 seconds.
