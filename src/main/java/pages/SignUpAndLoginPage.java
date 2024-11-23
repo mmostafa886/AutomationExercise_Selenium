@@ -6,8 +6,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import utils.JsonDataReader;
+import utils.TestSetUp;
 
 
 public class SignUpAndLoginPage {
@@ -46,6 +48,7 @@ public class SignUpAndLoginPage {
     public SignUpAndLoginPage(WebDriver driver) {
         this.driver = driver;
         this.menuBar = new MenuBar(driver);
+        TestSetUp.getFluentWait().until(ExpectedConditions.titleContains("Signup"));
     }
 
     public SignUpAndLoginPage signUpFirstStep(String name, String emailAddress) {

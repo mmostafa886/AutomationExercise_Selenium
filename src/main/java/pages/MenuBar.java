@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import utils.TestSetUp;
 
 @Slf4j
 public class MenuBar {
@@ -22,7 +24,7 @@ public class MenuBar {
     @Step("Navigate to Products page")
     public ProductsPage goToProductsPage() {
         driver.findElement(products).click();
-        //TestSetUp.getFluentWait().until(ExpectedConditions.titleContains("Products"));
+        TestSetUp.getFluentWait().until(ExpectedConditions.titleContains("Products"));
         return new ProductsPage(driver);
     }
 
