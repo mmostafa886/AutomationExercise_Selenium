@@ -1,4 +1,5 @@
 import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.ITestContext;
@@ -36,17 +37,17 @@ public class WebTest {
         TestSetUp.teardown();
     }
 
-    @Test
+    @Test (description = "TC-WEB-001 - Open the Web-App homepage")
     public void openHomePage() {
         new HomePage(getDriver()).assertHomePageOpened();
     }
 
-    @Test
+    @Test(description = "TC-WEB-002 - Products' page navigation")
     public void openProductsPage() {
         new MenuBar(getDriver()).goToProductsPage().assertProductsPageOpened();
     }
 
-    @Test
+    @Test(description = "TC-WEB-003 - Register new user account")
     public void registerNewUserAndLoginTest() {
         SignUpAndLoginPage signUpAndLogin = TestSetUp.getMenuBar().goToSignUpAndLoginPage();
         AccountCreatedPage accountCreatedPage = signUpAndLogin

@@ -124,3 +124,6 @@ The user can open the generated report directly after the execution by combining
 ### JsonDataReader
 - A Java class `(src/main/java/utils/JsonDataReader.java)` was added in order to handle the JSON data files.
 - It can be used to pass the Source file to the responsible method then process data from this data file `(Ex. WebTest.registerNewUserAndLoginTest)`.
+### Bringing an element to display
+- when it is needed to bring an element into display, we can use either `Selenium Actions` or `JavaScript scrollIntoView`.
+- Browsers like Firefox may not act as expected with `Actions` that's why it is better to use `Javascript`.
