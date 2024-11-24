@@ -21,6 +21,13 @@ public class AllureParameterListener implements ITestListener {
         Allure.parameter("Execution Mode: ", executionEnvironment);
         Allure.label("tag" , executionEnvironment);
         //Allure.description("Browser: " + browser);
+        // Add TestNG groups as labels
+        String[] groups = result.getMethod().getGroups();
+        Allure.parameter("Groups: ", groups);
+        for (String group : groups) {
+            Allure.label("tag", group);
+
+        }
     }
 
     @Override

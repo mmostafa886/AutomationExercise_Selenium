@@ -18,27 +18,27 @@ public class MixedTest {
 
     String browser;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void getBrowser(ITestContext context) {
         TestSetUp.setExecutionBrowser(context);
         browser = TestSetUp.getExecutionBrowser();
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void beforeTest() {
         TestSetUp.setUp(browser);
         Allure.step("Browser: " + browser);
         TestSetUp.startWebAppInstance();
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void removeDriver(ITestResult result) {
         TestSetUp.screenshotOnFailure(result);
         TestSetUp.teardown();
     }
 
-    @Test(description =
-            "TC-MIX-001 - Create New user account through API then Login from Web and delete account through API Using Request Parameters")
+    @Test(groups = { "Smoke" },
+            description = "TC-MIX-001 - Create New user account through API then Login from Web and delete account through API Using Request Parameters")
     public void registerNewUserAPIAndLoginTest() {
         log.info("TC-MIX-001 - Create New user account through API then Login from Web " +
                 "and delete account through API Using Request Parameters");
@@ -54,7 +54,8 @@ public class MixedTest {
         userApi.deleteAccount(userApi.getRandomName() + "@email.com", userApi.getRandomName());
     }
 
-    @Test(description = "TC-MIX-002 - Search for a Random Product")
+    @Test(groups = { "Smoke", "Regression" },
+            description = "TC-MIX-002 - Search for a Random Product")
     public void searchForProduct() {
         ProductApi productApi = new ProductApi();
         String randomProductName = productApi.getRandomProductName();

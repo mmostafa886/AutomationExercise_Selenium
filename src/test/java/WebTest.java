@@ -15,36 +15,36 @@ import static utils.TestSetUp.getDriver;
 public class WebTest {
     String browser;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void getBrowser(ITestContext context) {
         TestSetUp.setExecutionBrowser(context);
         browser = TestSetUp.getExecutionBrowser();
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void beforeTest() {
         TestSetUp.setUp(browser);
         Allure.step("Browser: " + browser);
         TestSetUp.startWebAppInstance();
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void removeDriver(ITestResult result) {
         TestSetUp.screenshotOnFailure(result);
         TestSetUp.teardown();
     }
 
-    @Test (description = "TC-WEB-001 - Open the Web-App homepage")
+    @Test (groups = { "Smoke" },description = "TC-WEB-001 - Open the Web-App homepage")
     public void openHomePage() {
         new HomePage(getDriver()).assertHomePageOpened();
     }
 
-    @Test(description = "TC-WEB-002 - Products' page navigation")
+    @Test(groups = { "Regression" },description = "TC-WEB-002 - Products' page navigation")
     public void openProductsPage() {
         new MenuBar(getDriver()).goToProductsPage().assertProductsPageOpened();
     }
 
-    @Test(description = "TC-WEB-003 - Register new user account")
+    @Test(groups = { "Smoke", "Regression" },description = "TC-WEB-003 - Register new user account")
     public void registerNewUserAndLoginTest() {
         SignUpAndLoginPage signUpAndLogin = TestSetUp.getMenuBar().goToSignUpAndLoginPage();
         AccountCreatedPage accountCreatedPage = signUpAndLogin

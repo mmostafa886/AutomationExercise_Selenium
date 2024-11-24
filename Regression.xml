@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Regression Test Suite" parallel="methods"
+       thread-count="2"> <!--Use this line in parallel execution is needed  parallel="methods" thread-count="2"-->
+    <listeners>
+        <listener class-name="utils.AllureParameterListener"/>
+    </listeners>
+    <test name="Chrome Test">
+        <parameter name="Browser" value="Chrome"/>
+        <groups>
+            <run>
+                <include name="Regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="MultiThreadedTest"/>
+            <class name="WebTest"/>
+            <class name="ApiTest"/>
+            <class name="MixedTest"/>
+        </classes>
+    </test>
+    <test name="Firefox Test">
+        <parameter name="Browser" value="FireFox"/>
+        <groups>
+            <run>
+                <include name="Regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="MultiThreadedTest"/>
+            <class name="WebTest"/>
+            <class name="ApiTest"/>
+            <class name="MixedTest"/>
+        </classes>
+    </test>
+    <test name="Edge Test">
+        <parameter name="Browser" value="Edge"/>
+        <groups>
+            <run>
+                <include name="Regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="MultiThreadedTest"/>
+            <class name="WebTest"/>
+            <class name="ApiTest"/>
+            <class name="MixedTest"/>
+        </classes>
+    </test>
+</suite>

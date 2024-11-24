@@ -30,25 +30,25 @@ public class MultiThreadedTest {
         return TestSetUp.getDriver();
     }
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void getBrowser(ITestContext context) {
         TestSetUp.setExecutionBrowser(context);
         browser = TestSetUp.getExecutionBrowser();
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void startDriver() {
         TestSetUp.setUp(browser);
         Allure.step("Browser: " + browser);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void removeDriver(ITestResult result) {
         TestSetUp.screenshotOnFailure(result);
         TestSetUp.teardown();
     }
 
-    @Test(description = "Search Google For SHAFT_Engine")
+    @Test(groups = { "Smoke", "Regression" },description = "Search Google For SHAFT_Engine")
     public void searchGoogleForShaftEngine() {
         log.info("Navigate to google");
         //Allure.addAttachment("Log", "text/plain", "Navigate to google");
@@ -80,19 +80,8 @@ public class MultiThreadedTest {
         log.info("Browser Title: " + getDriver().getTitle());
     }
 
-    //
-//    @Test(description = "Test Automation University Navigation")
-//    public void testAutomationUniversityNavigation() {
-//        getDriver().browser().navigateToURL("https://testautomationu.applitools.com/");
-//        getDriver().browser().assertThat().title().contains("Test");
-//        getDriver().element().click(certificates);
-//        getDriver().element().click(top100Students);
-//        int studentsNumber = getDriver().element().getElementsCount(rankStudents);
-//        Validations.assertThat().object(studentsNumber).isNotNull();
-//    }
-//
     //Intentionally failing
-    @Test(description = "Search Google For SHAFT_Engine#2")
+    @Test(groups = { "Smoke", "Regression" },description = "Search Google For SHAFT_Engine#2")
     public void searchGoogleForShaftEngine2() {
         log.info("Navigate to google");
         Allure.addAttachment("Log", "text/plain", "Navigate to google");
