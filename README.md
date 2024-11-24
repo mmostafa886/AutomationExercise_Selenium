@@ -49,7 +49,16 @@
   3. `thread-count`: the number of Threads/Instances that can be opened for the parallel execution.
 - There is no a step-by-step guide for enabling the Parallel execution, but it depends on how the tests are organized so the configuration we used in the `Testng.xml` is cohesively related to the example setup we use for `src/test/java/MultiThreadedTest.java`.
 ### Execution based on Tags
-[NEXT]
+- The TestNG groups Ex. `[@Test(groups = { "Smoke", "Regression" })]` are used to define tags at which we can use to control the execution.
+- XML files were added `[Regression.xml & Smoke.xml]` in order to be used later in the execution command in order to only execute specific group of tests at which we need to add the snippets below to execute only the tests with the groups' tag contain this group (in the case below: Regression).
+  ```
+          <groups>
+            <run>
+                <include name="Regression"/>
+            </run>
+        </groups>
+  ````
+- The used execution command in this case will be `[mvn clean test -Dsurefire.suiteXmlFiles=Regression.xml]`.
 ### Sample Execution Comparison
 - Executing the `MultiThreadedTest` for `Chrome, FirFox & Edge` is the sample test used in Testng.xml `(<class name="MultiThreadedTest"/>)`.
 - Serial execution (not parallel) took around ~ 16 seconds.
