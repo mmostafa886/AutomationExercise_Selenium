@@ -99,6 +99,12 @@ public class DriverFactory {
      */
     private static FirefoxOptions getFirefoxOptions(boolean headless) {
         FirefoxOptions options = new FirefoxOptions();
+        /**
+         * Configures Firefox to use the BiDi protocol,
+         * ensuring compatibility with the latest WebDriver standards.
+         * https://firefox-source-docs.mozilla.org/remote/Prefs.html
+         */
+        options.addPreference("remote.active-protocols", "1");
         if (headless) {
             options.addArguments("--headless");
             options.addArguments("--window-size=1920,1080");

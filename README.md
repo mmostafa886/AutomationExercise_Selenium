@@ -41,6 +41,13 @@
 #### Hints on ThreadLocal
 1. Remember to use private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); to properly manage your driver in your test classes as following the usual driver initialization methods will result in problems in managing drivers' sessions & immature tests ending.
 2. The ThreadLocal must be defined at the Class level to avoid repeated initialization.
+    ```Example
+    public class TestSetUp {
+        private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+        private static ThreadLocal<WebDriverWait> waitThreadLocal = new ThreadLocal<>();
+        private static ThreadLocal<FluentWait<WebDriver>> fluentWaitThreadLocal = new ThreadLocal<>();
+        .............
+    ```
 3. We used ThreadLocal for the `WebDriver` which forces using ThreadLocal for corresponding entities `WebDriverWait & FluentWait`.
 #### Testng.xml needed modifications
 - The `Testng.xml` needs to be modified on the `<suite>` level as follows: `<suite name="All Test Suite" parallel="methods" thread-count="2">`
@@ -140,5 +147,8 @@ The user can open the generated report directly after the execution by combining
 - A Java class `(src/main/java/utils/JsonDataReader.java)` was added in order to handle the JSON data files.
 - It can be used to pass the Source file to the responsible method then process data from this data file `(Ex. WebTest.registerNewUserAndLoginTest)`.
 ### Bringing an element to display
-- when it is needed to bring an element into display, we can use either `Selenium Actions` or `JavaScript scrollIntoView`.
+- Whenever it is needed to bring an element into display, we can use either `Selenium Actions` or `JavaScript scrollIntoView`.
 - Browsers like Firefox may not act as expected with `Actions` that's why it is better to use `Javascript`.
+### Firefox (BiDi) Bidirectional Webdriver protocol
+- To enable BiDi for firefox, the browser options in `(DriverFactory)` must include the line ` options.addPreference("remote.active-protocols", "1");`.
+- More details on that can be found under `(https://firefox-source-docs.mozilla.org/remote/Prefs.html)`.
